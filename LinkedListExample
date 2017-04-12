@@ -1,0 +1,113 @@
+
+#define pa2
+//#endif (placed at the end of the header file)
+#include <string>
+#include <cstdlib>
+#include <iostream>
+
+
+
+
+struct Node {
+	std::string data;
+	Node *next;
+	Node() {};
+	Node(std::string x) {
+		data = x;
+	}
+	Node* getNext() {
+		return next;
+	}
+	void setData(std::string d) {
+		data = d;
+	}
+}; 
+
+typedef struct Node* node;
+class LinkedList {
+private:
+     /*{
+        std::string data;
+        Node *next;
+    }*/
+    node head;
+    node tail;
+	int count;
+	
+public:
+
+	node getHead() 
+	{
+		return head;
+	}
+	void printList() {
+		node currentPointer;
+		currentPointer = head;
+
+		while (currentPointer) { //while(currentPointer != NULL)
+			for (int i = 0; i<8; i++)
+			{
+				if (currentPointer)
+				{
+					std::cout << currentPointer->data<<"\t";
+					currentPointer = currentPointer->next;
+				}
+				else
+					break;
+			}
+			std::cout << "\n";
+			
+
+		}
+	}
+
+	void addNode(std::string valueToBeAdded) {
+		node currentPointer;
+		node nodeToBeInserted = new Node;
+		nodeToBeInserted->next = NULL;
+		nodeToBeInserted->data = valueToBeAdded;
+		if (head != NULL) { //if there are nodes in the linked list
+			currentPointer = tail;
+			currentPointer->next = nodeToBeInserted;
+			tail = nodeToBeInserted;
+		}
+		else { //if LinkedList contains nothing
+			head = nodeToBeInserted; 
+			tail = nodeToBeInserted;
+		}
+	}
+	void deleteNode(std::string dataToBeDeleted) {
+		node p;
+		node q;
+		node z; //node to be deleted
+		p = head;
+		q = head;
+
+		while (q != NULL && q ->data.std::string::compare(dataToBeDeleted) != 0) { //move p and q (who's one step forward)
+			p = q;
+			q = q->next;
+		}
+
+		if (q != NULL) { //if data found, delete node
+			z = q;
+			q = q->next;
+			p->next = q;
+			delete z;
+		}
+		else { //if data NOT found
+			std::cout << "data not found!" << std::endl;
+		}
+	}
+LinkedList() 
+{
+		head = NULL;
+		tail = NULL;
+}
+
+};
+
+/
+
+
+
+
