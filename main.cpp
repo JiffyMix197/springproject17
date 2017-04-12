@@ -18,6 +18,9 @@ int numofsku=0;
 static const char numpool[] = "0123456789";
 static int numpoolsize = sizeof(numpool) - 1;
 
+
+
+
 char getRandomnum() {
     return numpool[rand() % numpoolsize];
 }
@@ -222,8 +225,44 @@ typedef struct Node* node;
 
 class invLinkedList {
 
+
+    void PrintNode(itemNode* n){
+
+
+        cout << "NAME:      " << n->name << endl;
+        cout << "PRICE:     " << n->price << endl;
+        cout << "DIMENSION: " << n->dimension << endl;
+        cout << "REVISION:  " << n->revision << endl;
+        cout << "MODEL:     " << n->model << endl;
+        cout << "COLOR:     " << n->color << endl;
+        cout << "SERIAL:    " << n->serial << endl;
+        cout << "SKU:       " << n->SKU << endl;
+    }
+
+
+
     itemNode *g_head; //will point to head of data structure
     int g_sizeOfWarehouse = 0;
+
+
+    void DeleteNode(int n){
+        itemNode* temp1 = g_head;
+        if(n == 1){
+            g_head = temp1->nextItem;
+            free(temp1);
+            return;
+        }
+        int i;
+        for(i = 0; i < n-2;i++)
+            temp1=temp1->nextItem;
+
+        itemNode * temp2 = temp1->nextItem;
+        temp1->nextItem = temp2->nextItem;
+        free(temp2);
+    }
+
+
+
 
     bool initiateData() { //creates the linked list data structure
 
