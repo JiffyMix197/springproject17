@@ -1,7 +1,6 @@
 #include "SemesterProject.h"
 
 
-
 struct itemNode{ //struct for managing items
     string name;
     string price;
@@ -14,175 +13,11 @@ struct itemNode{ //struct for managing items
     itemNode* nextItem;
 };
 
-itemNode *g_head; //will point to head of data structure
-int g_sizeOfWarehouse = 0;
-
-bool initiateData() { //creates the linked list data structure
-
-    int i = 0;
-    itemNode *n;
-    itemNode *temp;
-
-    n = new itemNode;
-    n->name = "NA";
-    n->price = "NA";
-    n->dimension = "NA";
-    n->revision = "NA";
-    n->model = "NA";
-    n->color = "NA";
-    n->serial = "NA";
-    n->SKU = "NA";
-    temp = n;
-    g_head = n;
-
-    while (i <= g_sizeOfWarehouse) { //loop to initialize all free lists
-        n = new itemNode;
-        n->name = "NA";
-        n->price = "NA";
-        n->dimension = "NA";
-        n->revision = "NA";
-        n->model = "NA";
-        n->color = "NA";
-        n->serial = "NA";
-        n->SKU = "NA";
-        temp->nextItem = n;
-        temp = temp->nextItem;
-        i++;
-    }
-
-    return true;
-}
-
-string searchSKU(string SKUcheck) {
-
-    itemNode *n = g_head;
-
-
-    for (int i = 0; i <= g_sizeOfWarehouse; i++) {  //loop used find a matching SKU and print its values
-
-
-        if ((n->SKU) == SKUcheck) {
-            cout << "NAME:      " << n->name << endl;
-            cout << "PRICE:     " << n->price << endl;
-            cout << "DIMENSION: " << n->dimension << endl;
-            cout << "REVISION:  " << n->revision << endl;
-            cout << "MODEL:     " << n->model << endl;
-            cout << "COLOR:     " << n->color << endl;
-            cout << "SERIAL:    " << n->serial << endl;
-            cout << "SKU:       " << n->SKU << endl;
-
-            i = g_sizeOfWarehouse;
-        }
-
-        if (i < g_sizeOfWarehouse) {
-            n = n->nextItem;
-        }
-
-        if (i == g_sizeOfWarehouse) {
-            cout << "ERROR: SKU '" << SKUcheck << "' NOT FOUND IN SYSTEM, PLEASE TRY AGAIN." << endl;
-        }
-
-    }
-
-}
-
-
-string genSearch(string category, string specificInfo) {
-
-    itemNode *n = g_head;
-    locale loc;
-    category = tolower(category, loc);
-
-
-
-        if(category == "name"){
-            for (int i = 0; i <= g_sizeOfWarehouse; i++) {  //loop used find a matching spec and print its values
-                if ((n->name) == specificInfo) {
-                    cout << "NAME:      " << n->name << endl;
-                    cout << "PRICE:     " << n->price << endl;
-                    cout << "DIMENSION: " << n->dimension << endl;
-                    cout << "REVISION:  " << n->revision << endl;
-                    cout << "MODEL:     " << n->model << endl;
-                    cout << "COLOR:     " << n->color << endl;
-                    cout << "SERIAL:    " << n->serial << endl;
-                    cout << "SKU:       " << n->SKU << endl;
-
-                    i = g_sizeOfWarehouse;
-                }
-
-                if (i < g_sizeOfWarehouse) {
-                    n = n->nextItem;
-                }
-
-                if (i == g_sizeOfWarehouse) {
-                    cout << "ERROR: The " << category<< " " << specificInfo << "' NOT FOUND IN SYSTEM, PLEASE TRY AGAIN." << endl;
-                }
-            }
-        }
-
-        if(category == "price"){
-
-        }
-
-        if(category == "dimension"){
-
-        }
-
-        if(category == "revision"){
-
-        }
-
-        if(category == "model"){
-
-        }
-
-        if(category == "color"){
-
-        }
-
-        if(category == "serial"){
-
-        }
-
-        if(category == "SKU"){
-
-        }
-
-
-
-        if ((n->SKU) == SKUcheck) {
-            cout << "NAME:      " << n->name << endl;
-            cout << "PRICE:     " << n->price << endl;
-            cout << "DIMENSION: " << n->dimension << endl;
-            cout << "REVISION:  " << n->revision << endl;
-            cout << "MODEL:     " << n->model << endl;
-            cout << "COLOR:     " << n->color << endl;
-            cout << "SERIAL:    " << n->serial << endl;
-            cout << "SKU:       " << n->SKU << endl;
-
-            i = g_sizeOfWarehouse;
-        }
-
-        if (i < g_sizeOfWarehouse) {
-            n = n->nextItem;
-        }
-
-        if (i == g_sizeOfWarehouse) {
-            cout << "ERROR: SKU '" << SKUcheck << "' NOT FOUND IN SYSTEM, PLEASE TRY AGAIN." << endl;
-        }
-
-    }
-
-}
-
-
-
 
 int inputValid(){  //checks if input is valid (is a number)
 
     int choice;
     bool isValid = false;
-    itemNode *n = g_head;
 
 
     while(isValid == false) {  //loops while as long as the program doesn't know if choice is valid
@@ -209,84 +44,153 @@ int inputValid(){  //checks if input is valid (is a number)
 
 
 int main() {
-    bool isRunning = true;
-    bool hasSpace = true;
-    string itemName;
 
-    cout << "Hello, and welcome to warehouse inventory manager 2000!" << endl;
-    cout << "Please enter the size of your warehouse: ";
-
-    int input = inputValid();
-    g_sizeOfWarehouse = input;
-    initiateData();
+    return 0;
+}
 
 
 
-    while(isRunning == true){
-        cout << "Please select from the following options:\n";
-        cout << "1) Add item to inventory\n";
-        cout << "2) Remove item from inventory\n";
-        cout << "3) Print contents of warehouse\n";
-        cout << "4) Exit program" << endl;
 
-        input = inputValid();
 
-        if(input == 1){
-            cout << "Please enter name of item: ";
-            cin >> itemName;   //need to add input verification
-            hasSpace = false;
 
-            for(int i = 0; i < g_sizeOfWarehouse; i++){ //looks for the next empty space in warehouse
-                if(warehouse[i] == "xxxx"){
-                    warehouse[i] = itemName;
-                    i = warehouseSize;
-                    hasSpace = true;
-                }
-            }
 
-            if(hasSpace == false){
-                cout << "Warning, no room in warehouse.  Please remove items and then try again\n" << endl;
-            }
 
+typedef struct Node* node;
+
+class invLinkedList {
+
+    itemNode *g_head; //will point to head of data structure
+    int g_sizeOfWarehouse = 0;
+
+    bool initiateData() { //creates the linked list data structure
+
+        int i = 0;
+        itemNode *n;
+        itemNode *temp;
+
+        n = new itemNode;
+        n->name = "NA";
+        n->price = "NA";
+        n->dimension = "NA";
+        n->revision = "NA";
+        n->model = "NA";
+        n->color = "NA";
+        n->serial = "NA";
+        n->SKU = "NA";
+        temp = n;
+        g_head = n;
+
+        while (i <= g_sizeOfWarehouse) { //loop to initialize all free lists
+            n = new itemNode;
+            n->name = "NA";
+            n->price = "NA";
+            n->dimension = "NA";
+            n->revision = "NA";
+            n->model = "NA";
+            n->color = "NA";
+            n->serial = "NA";
+            n->SKU = "NA";
+            temp->nextItem = n;
+            temp = temp->nextItem;
+            i++;
         }
 
-        else if(input == 2){
-            cout << "Please enter name of item: ";
-            cin >> itemName;  //add input verification
+        return true;
+    }
 
-            for(int i = 0; i < warehouseSize; i++){ //looks for the next empty space in warehouse
-                if(warehouse[i] == itemName){
-                    warehouse[i] = "xxxx";
-                }
-            }
+    bool searchSKU(int SKUcheck) {
 
-            cout << "Item removed from list\n" << endl;
 
-        }
-
-        else if(input == 3){
-
-            for(int i = 0; i < warehouseSize; i++){ //looks for the next empty space in warehouse
-                cout << "item #";
-                cout << i+1;
-                cout << " ";
-                cout << warehouse[i] << endl;
-            }
-            cout << endl;
-
-        }
-
-        else if (input == 4) {
-        isRunning = false;
-        }
-
-        else {
-            cout << "Error, not a valid option\n" << endl;
-        }
     }
 
 
-    //data structure may be better, and more input verification is needed
-    //at least at the moment a dynamic array works
-    return 0;
+    bool addNode(){
+
+    }
+
+
+    itemNode genSearch(string category, string specificInfo) {
+
+        itemNode *n = g_head;
+        locale loc;
+        category = tolower(category, loc);
+        invLinkedList tempList;
+
+
+        if(category == "name"){
+            for (int i = 0; i <= g_sizeOfWarehouse; i++) {  //loop used find a matching spec and print its values
+                if ((n->name) == specificInfo) {
+
+
+
+                    cout << "NAME:      " << n->name << endl;
+                    cout << "PRICE:     " << n->price << endl;
+                    cout << "DIMENSION: " << n->dimension << endl;
+                    cout << "REVISION:  " << n->revision << endl;
+                    cout << "MODEL:     " << n->model << endl;
+                    cout << "COLOR:     " << n->color << endl;
+                    cout << "SERIAL:    " << n->serial << endl;
+                    cout << "SKU:       " << n->SKU << endl;
+
+                    //i = g_sizeOfWarehouse;
+                }
+
+                if (i < g_sizeOfWarehouse) {
+                    n = n->nextItem;
+                }
+
+                if (i == g_sizeOfWarehouse) {
+                    cout << "ERROR: The " << category<< " " << specificInfo << "' NOT FOUND IN SYSTEM, PLEASE TRY AGAIN." << endl;
+                }
+            }
+        }
+
+        if(category == "price"){
+            for (int i = 0; i <= g_sizeOfWarehouse; i++) {  //loop used find a matching spec and print its values
+                if ((n->price) == specificInfo) {
+                    cout << "NAME:      " << n->name << endl;
+                    cout << "PRICE:     " << n->price << endl;
+                    cout << "DIMENSION: " << n->dimension << endl;
+                    cout << "REVISION:  " << n->revision << endl;
+                    cout << "MODEL:     " << n->model << endl;
+                    cout << "COLOR:     " << n->color << endl;
+                    cout << "SERIAL:    " << n->serial << endl;
+                    cout << "SKU:       " << n->SKU << endl;
+                }
+
+                if (i < g_sizeOfWarehouse) {
+                    n = n->nextItem;
+                }
+
+                if (i == g_sizeOfWarehouse) {
+                    cout << "ERROR: The " << category<< " " << specificInfo << "' NOT FOUND IN SYSTEM, PLEASE TRY AGAIN." << endl;
+                }
+            }
+        }
+
+        if(category == "dimension"){
+
+        }
+
+        if(category == "revision"){
+
+        }
+
+        if(category == "model"){
+
+        }
+
+        if(category == "color"){
+
+        }
+
+        if(category == "serial"){
+
+        }
+
+        if(category == "SKU"){
+
+        }
+
+    }
 }
