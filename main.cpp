@@ -13,6 +13,88 @@ struct itemNode{ //struct for managing items
     itemNode* nextItem;
 };
 
+static vector<string> skugenerated;
+int numofsku=0;
+static const char numpool[] = "0123456789";
+static int numpoolsize = sizeof(numpool) - 1;
+
+char getRandomnum() {
+    return numpool[rand() % numpoolsize];
+}
+string generatesku() {
+    int skulength = 6;
+    srand(time(0));
+    string sku;
+    for (int i = 0; i < skulength; i++) {
+        sku += getRandomnum();
+    }
+    return sku;
+}
+int getsku() {
+    bool loopbreak = true;
+    while (loopbreak) {
+        string sku = generatesku();
+        int i=0;
+        if (skugenerated.size() == 0) {
+            skugenerated.insert(skugenerated.begin() + numofsku, sku);
+            numofsku++;
+            return stoi(sku);
+        }
+        else {
+            for (i = 0; i < skugenerated.size(); i++) {
+                if (sku == skugenerated[i]) {
+                    break;
+                }
+            }
+            if (i == skugenerated.size()) {
+                skugenerated.insert(skugenerated.begin() + numofsku, sku);
+                numofsku++;
+                return stoi(sku);
+            }
+        }
+    }
+}
+static vector<string> serialgenerated;
+int numofserial = 0;
+static const char numletterpool[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+static int numletterpoolsize = sizeof(numletterpool) - 1;
+char getRandomnumletter() {
+    return numletterpool[rand() % numletterpoolsize];
+}
+string generateserial() {
+    int seriallength = 16;
+    srand(time(0));
+    string serial;
+    for (int i = 0; i < seriallength; i++) {
+        serial += getRandomnumletter();
+    }
+    return serial;
+}
+string getserial() {
+    bool loopbreak = true;
+    while (loopbreak) {
+        string serial = generateserial();
+        int i = 0;
+        if (serialgenerated.size() == 0) {
+            serialgenerated.insert(serialgenerated.begin() + numofserial, serial);
+            numofserial++;
+            return serial;
+        }
+        else {
+            for (i = 0; i < serialgenerated.size(); i++) {
+                if (serial == serialgenerated[i]) {
+                    break;
+                }
+            }
+            if (i == serialgenerated.size()) {
+                serialgenerated.insert(serialgenerated.begin() + numofserial, serial);
+                numofserial++;
+                return (serial);
+            }
+        }
+    }
+}
+
 
 int inputValid(){  //checks if input is valid (is a number)
 
@@ -44,7 +126,88 @@ int inputValid(){  //checks if input is valid (is a number)
 
 
 int main() {
+    cout << getsku() << endl;
+    cout << getserial() << endl;
 
+
+
+
+/*    bool isRunning = true;
+    bool hasSpace = true;
+    string itemName;
+
+    cout << "Hello, and welcome to warehouse inventory manager 2000!" << endl;
+    cout << "Please enter the size of your warehouse: ";
+
+    int input = inputValid();
+
+
+    while(isRunning == true){
+        cout << "Please select from the following options:\n";
+        cout << "1) Add item to inventory\n";
+        cout << "2) Remove item from inventory\n";
+        cout << "3) Print contents of warehouse\n";
+        cout << "4) Exit program" << endl;
+
+        input = inputValid();
+
+        if(input == 1){
+            cout << "Please enter name of item: ";
+            cin >> itemName;   //need to add input verification
+            hasSpace = false;
+
+            for(int i = 0; i < g_sizeOfWarehouse; i++){ //looks for the next empty space in warehouse
+                if(warehouse[i] == "xxxx"){
+                    warehouse[i] = itemName;
+                    i = warehouseSize;
+                    hasSpace = true;
+                }
+            }
+
+            if(hasSpace == false){
+                cout << "Warning, no room in warehouse.  Please remove items and then try again\n" << endl;
+            }
+
+        }
+
+        else if(input == 2){
+            cout << "Please enter name of item: ";
+            cin >> itemName;  //add input verification
+
+            for(int i = 0; i < warehouseSize; i++){ //looks for the next empty space in warehouse
+                if(warehouse[i] == itemName){
+                    warehouse[i] = "xxxx";
+                }
+            }
+
+            cout << "Item removed from list\n" << endl;
+
+        }
+
+        else if(input == 3){
+
+            for(int i = 0; i < warehouseSize; i++){ //looks for the next empty space in warehouse
+                cout << "item #";
+                cout << i+1;
+                cout << " ";
+                cout << warehouse[i] << endl;
+            }
+            cout << endl;
+
+        }
+
+        else if (input == 4) {
+            isRunning = false;
+        }
+
+        else {
+            cout << "Error, not a valid option\n" << endl;
+        }
+    }
+*/
+
+    //data structure may be better, and more input verification is needed
+    //at least at the moment a dynamic array works
     return 0;
 }
 
@@ -111,9 +274,8 @@ class invLinkedList {
 
     itemNode genSearch(string category, string specificInfo) {
 
+
         itemNode *n = g_head;
-        locale loc;
-        category = tolower(category, loc);
         invLinkedList tempList;
 
 
@@ -193,4 +355,4 @@ class invLinkedList {
         }
 
     }
-}
+};
