@@ -140,9 +140,13 @@ int main() {
 		string tempdata3;
 		string option;
 		string newData;
+		string serial;
+		string fileName;
 
 		int lSize = 0;
 		bool firstPass=true;
+		bool continueMenu;
+
 		
 		switch (inputValid())
 		{
@@ -165,15 +169,17 @@ int main() {
 			cin >> newData;
 			tempItem->color = newData;
 
-			cout << "Please enter the dimension of the item:" << endl;
-			cin >> newData;
-			tempItem->dimension = newData;
+		
 
-			cout << "Please enter the price of the item:" << endl;
-			cin >> newData;
-			tempItem->price = newData;
-
-			tempItem->SKU = getsku();
+			tempItem->SKU = inventory->skuMatch(getsku(), tempItem->name, tempItem->model, tempItem->color, tempItem->revision);
+			
+			if (inventory->priceMatch(tempItem->SKU).compare("empty") == 0) {
+				cout << "Please enter the price of the item (in USD):" << endl;
+				cin >> newData;
+				tempItem->price = "$" + newData;
+			}
+			else
+				tempItem ->price = inventory->priceMatch(tempItem->SKU);
 
 			tempItem->serial = getserial();
 
@@ -197,20 +203,19 @@ int main() {
 			while (firstPass || tempList->sizeOfList() > 1)
 			{
 				
-				
+				searchMenu:;
 				cout << "\t***********\n";
 				cout << "\n\tSEARCH MENU\n";
 				cout << "\n\t***********\n";
 				cout << "\tPlease select a search category:\n" << endl;
 				cout << "\t1) NAME" << endl;
 				cout << "\t2) PRICE" << endl;
-				cout << "\t3) DIMENSION" << endl;
-				cout << "\t4) REVISION" << endl;
-				cout << "\t5) MODEL" << endl;
-				cout << "\t6) COLOR" << endl;
-				cout << "\t7) SERIAL" << endl;
-				cout << "\t8) SKU" << endl;
-				cout << "\t9) Quit Search" << endl;
+				cout << "\t3) REVISION" << endl;
+				cout << "\t4) MODEL" << endl;
+				cout << "\t5) COLOR" << endl;
+				cout << "\t6) SERIAL" << endl;
+				cout << "\t7) SKU" << endl;
+				cout << "\t8) Quit Search" << endl;
 
 				switch (inputValid()) {
 				case 1:
@@ -235,18 +240,8 @@ int main() {
 						tempList = tempList->genSearch(option, tempdata2);
 
 					break;
+				
 				case 3:
-					option = "dimension";
-					cout << "Please enter the " << option << " of the item you are searching for:" << endl;
-					cin >> tempdata2;
-					if (firstPass) {
-						tempList = inventory->genSearch(option, tempdata2);
-					}
-					else
-						tempList = tempList->genSearch(option, tempdata2);
-
-					break;
-				case 4:
 					option = "revision";
 					cout << "Please enter the " << option << " of the item you are searching for:" << endl;
 					cin >> tempdata2;
@@ -257,7 +252,7 @@ int main() {
 						tempList = tempList->genSearch(option, tempdata2);
 
 					break;
-				case 5:
+				case 4:
 					option = "model";
 					cout << "Please enter the " << option << " of the item you are searching for:" << endl;
 					cin >> tempdata2;
@@ -269,7 +264,7 @@ int main() {
 
 					break;
 
-				case 6:
+				case 5:
 					option = "color";
 					cout << "Please enter the " << option << " of the item you are searching for:" << endl;
 					cin >> tempdata2;
@@ -281,7 +276,7 @@ int main() {
 
 					break;
 
-				case 7:
+				case 6:
 					option = "serial";
 					cout << "Please enter the " << option << " of the item you are searching for:" << endl;
 					cin >> tempdata2;
@@ -293,7 +288,7 @@ int main() {
 
 					break;
 
-				case 8:
+				case 7:
 					option = "SKU";
 					cout << "Please enter the " << option << " of the item you are searching for:" << endl;
 					cin >> tempdata2;
@@ -305,19 +300,60 @@ int main() {
 
 					break;
 
-				case 9:
+				case 8:
 					goto leaveSearch;
 					break;
 				default:
 					cout << "Not a menu option. Please select an menu option." << endl;
+					goto searchMenu;
 					break;
 
 				}
 
 				if (tempList->sizeOfList() == 1)
 				{
+					continueMenu = true;
+					serial = tempList->GetHead()->serial;
+
 					cout << "Item found!" << endl;
-					tempList->printWholeList();
+					cout << "The serial code of the item is: " << serial << endl;
+					while (continueMenu) {
+	
+						cout << "\t***********\n";
+						cout << "\n\tITEM MENU\n";
+						cout << "\n\t***********\n";
+						cout << "What would you like to do?" << endl;
+						cout << "\t1) PRINT ITEM INFORMATION" << endl;
+						cout << "\t2) CHANGE ITEM PRICE" << endl;
+						cout << "\t3) DELETE ITEM" << endl;
+						cout << "\t4) RETURN TO MAIN MENU" << endl;
+
+						switch (inputValid()) {
+						case 1:
+							tempList->printWholeList();
+							break;
+						case 2:
+							cout << "What is the new price of the item?" << endl;
+							cin >> newData;
+							tempList->GetHead()->price = newData;
+							break;
+						case 3:
+							cout << "Are you sure you want to delete the item? Enter 'y' to delete." << endl;
+							cin >> option;
+							if (option == "y")
+								inventory->deleteNode(serial);
+								tempList->deleteNode(serial);
+								goto leaveSearch;
+							break;
+						case 4:
+							continueMenu = false;
+							break;
+
+						default:
+							cout << "Not a menu option.Please select an menu option." << endl;
+							break;
+						}
+					}
 				}
 
 				if (tempList->sizeOfList() > 1)
@@ -344,90 +380,6 @@ int main() {
 		}
 	}
 
-
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	// Tommy
-	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
-	/*    bool isRunning = true;
-	bool hasSpace = true;
-	string itemName;
-
-	cout << "Hello, and welcome to warehouse inventory manager 2000!" << endl;
-	cout << "Please enter the size of your warehouse: ";
-
-	int input = inputValid();
-
-
-	while(isRunning == true){
-	cout << "Please select from the following options:\n";
-	cout << "1) Add item to inventory\n";
-	cout << "2) Remove item from inventory\n";
-	cout << "3) Print contents of warehouse\n";
-	cout << "4) Exit program" << endl;
-
-	input = inputValid();
-
-	if(input == 1){
-	cout << "Please enter name of item: ";
-	cin >> itemName;   //need to add input verification
-	hasSpace = false;
-
-	for(int i = 0; i < g_sizeOfWarehouse; i++){ //looks for the next empty space in warehouse
-	if(warehouse[i] == "xxxx"){
-	warehouse[i] = itemName;
-	i = warehouseSize;
-	hasSpace = true;
-	}
-	}
-
-	if(hasSpace == false){
-	cout << "Warning, no room in warehouse.  Please remove items and then try again\n" << endl;
-	}
-
-	}
-
-	else if(input == 2){
-	cout << "Please enter name of item: ";
-	cin >> itemName;  //add input verification
-
-	for(int i = 0; i < warehouseSize; i++){ //looks for the next empty space in warehouse
-	if(warehouse[i] == itemName){
-	warehouse[i] = "xxxx";
-	}
-	}
-
-	cout << "Item removed from list\n" << endl;
-
-	}
-
-	else if(input == 3){
-
-	for(int i = 0; i < warehouseSize; i++){ //looks for the next empty space in warehouse
-	cout << "item #";
-	cout << i+1;
-	cout << " ";
-	cout << warehouse[i] << endl;
-	}
-	cout << endl;
-
-	}
-
-	else if (input == 4) {
-	isRunning = false;
-	}
-
-	else {
-	cout << "Error, not a valid option\n" << endl;
-	}
-	}
-	
-
-	//data structure may be better, and more input verification is needed
-	//at least at the moment a dynamic array works*/
 	return 0;
 }
 

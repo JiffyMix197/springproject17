@@ -16,12 +16,12 @@
 #include <time.h>
 #include <random>
 #include <cstring>
+#include <iomanip>
 using namespace std;
 
 struct ItemNode { //struct for managing items
 	string name;
 	string price;
-	string dimension;
 	string revision;
 	string model;
 	string color;
@@ -33,7 +33,6 @@ struct ItemNode { //struct for managing items
 
 		name = "NA";
 		price = "NA";
-		dimension = "NA";
 		revision = "NA";
 		model = "NA";
 		color = "NA";
@@ -55,10 +54,11 @@ public:
 	void printWholeList();
 	int sizeOfList();
 	void printNode(ItemNode* n);
-	void DeleteNode(int n);
+	void deleteNode(string itemToBeDeleted);
 	invLinkedList* genSearch(string category, string specificInfo);
 	void ClearList();
-
+	string skuMatch(string sk, string n, string m, string c, string r);	
+	string priceMatch(string sku);
 
 };
 
@@ -86,16 +86,27 @@ public:
 		}
 	};
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	void invLinkedList::ClearList() {
 		g_head = NULL;
 	}
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	void invLinkedList::printWholeList() {
 		ItemNode* currentNode = g_head;
-		if(currentNode)
-		cout << "COLOR" << "\t" << "NAME" << "\t" << "MODEL" << "\t" << "YEAR" << "\t" << "PRICE" << "\t" << "SKU" << "\t\t" << "SERIAL" << endl;
+		if (currentNode) {
+
+			const char separator = ' ';
+			const int nameWidth = 15;
+
+			cout << left << setw(nameWidth) << setfill(separator) << "COLOR";
+			cout << left << setw(nameWidth) << setfill(separator) << "NAME";
+			cout << left << setw(nameWidth) << setfill(separator) << "MODEL";
+			cout << left << setw(nameWidth) << setfill(separator) << "YEAR";
+			cout << left << setw(nameWidth) << setfill(separator) << "PRICE";
+			cout << left << setw(nameWidth) << setfill(separator) << "SKU";
+			cout << left << setw(nameWidth) << setfill(separator) << "SERIAL";
+			cout << endl;
+		}
+
 		while (currentNode) {
 			//cout << "\n" << endl;
 			printNode(currentNode);
@@ -117,79 +128,90 @@ public:
 
 	void invLinkedList::printNode(ItemNode* n) {
 
+
+		const char separator = ' ';
+		const int nameWidth = 15;
+
+		cout << left << setw(nameWidth) << setfill(separator) << n->color;
+		cout << left << setw(nameWidth) << setfill(separator) << n->name;
+		cout << left << setw(nameWidth) << setfill(separator) << n->model;
+		cout << left << setw(nameWidth) << setfill(separator) << n->revision;
+		cout << left << setw(nameWidth) << setfill(separator) << n->price;
+		cout << left << setw(nameWidth) << setfill(separator) << n->SKU;
+		cout << left << setw(nameWidth) << setfill(separator) << n->serial;
 		
-		/*cout << "NAME:      " << n->name << endl;
-		cout << "PRICE:     " << n->price << endl;
-		cout << "DIMENSION: " << n->dimension << endl;
-		cout << "REVISION:  " << n->revision << endl;
-		cout << "MODEL:     " << n->model << endl;
-		cout << "COLOR:     " << n->color << endl;
-		cout << "SERIAL:    " << n->serial << endl;
-		cout << "SKU:       " << n->SKU << endl;*/
-
-		cout << n->color << "\t" << n->name << "\t" << n->model << "\t" << n->revision << "\t" << n->price << "\t" << n->SKU << "\t" << n->serial << endl;
+		cout << endl;
 	};
 
 
+	void invLinkedList::deleteNode(string itemToBeDeleted) {
+		ItemNode* p;
+		ItemNode* q;
+		ItemNode* z; //node to be deleted
+		p = g_head;
+		q = g_head;
 
-	void invLinkedList::DeleteNode(int n) {
-		ItemNode* temp1 = g_head;
-		if (n == 1) {
-			g_head = temp1->nextItem;
-			free(temp1);
-			return;
-		}
-		int i;
-		for (i = 0; i < n - 2; i++)
-			temp1 = temp1->nextItem;
-
-		ItemNode * temp2 = temp1->nextItem;
-		temp1->nextItem = temp2->nextItem;
-		free(temp2);
-	};
-
-
-
-	//Initialize Linkedlist
-	/*bool initiateData() { //creates the linked list data structure
-
-		int i = 0;
-		ItemNode *n;
-		ItemNode *temp;
-
-		n = new ItemNode;
-		n->name = "NA";
-		n->price = "NA";
-		n->dimension = "NA";
-		n->revision = "NA";
-		n->model = "NA";
-		n->color = "NA";
-		n->serial = "NA";
-		n->SKU = "NA";
-		temp = n;
-		g_head = n;
-
-		while (i <= g_sizeOfWarehouse) { //loop to initialize all free lists
-			n = new ItemNode;
-			n->name = "NA";
-			n->price = "NA";
-			n->dimension = "NA";
-			n->revision = "NA";
-			n->model = "NA";
-			n->color = "NA";
-			n->serial = "NA";
-			n->SKU = "NA";
-			temp->nextItem = n;
-			temp = temp->nextItem;
-			i++;
+		while (q != NULL && q->serial.string::compare(itemToBeDeleted) != 0) { //move p and q (who's one step forward)
+			p = q;
+			q = q->nextItem;
 		}
 
-		return true;
+		if (q != NULL) { //if data found, delete node
+			if (q == g_head) {
+				g_head = q->nextItem;
+				delete q;
+			}
+			else {
+			z = q;
+			q = q->nextItem;
+			p->nextItem = q;
+			delete z;
+			}
+		}
+		else { //if data NOT found
+			std::cout << "Item not found!" << std::endl;
+		}
 	}
-	*/
 
+	string invLinkedList::skuMatch(string sk, string n, string m, string c, string r) {
+		ItemNode *tempItem = g_head;
+		string newSku;
+		if(!tempItem)
+			newSku = sk;
+		else{
+			while (tempItem) {
+				if ((tempItem->name).compare(n) == 0 && (tempItem->model).compare(m) == 0 && (tempItem->color).compare(c) == 0 && (tempItem->revision).compare(r) == 0) {
+					newSku = tempItem->SKU;
+				}
 
+				else
+					newSku = sk;
+				tempItem = tempItem->nextItem;
+			}
+		}
 
+		return newSku;
+	}
+
+	string invLinkedList::priceMatch(string sku) {
+		ItemNode *tempItem = g_head;
+		string newPrice;
+		if (!tempItem)
+			newPrice = "empty";
+		else {
+			while (tempItem) {
+				if ((tempItem->SKU).compare(sku) == 0) {
+					newPrice = tempItem->price;
+				}
+
+				else
+					newPrice = "empty";
+				tempItem = tempItem->nextItem;
+			}
+		}
+
+		return newPrice;
+	}
 
 
 	invLinkedList* invLinkedList::genSearch(string category, string specificInfo) {
@@ -209,7 +231,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 
@@ -231,28 +252,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
-					tempNode->serial = tempItem->serial;
-					tempNode->SKU = tempItem->SKU;
-					tempListPtr->addNode(tempNode);
-
-				}
-
-				tempItem = tempItem->nextItem;
-			}
-		}
-
-		if (category == "dimension") {
-			while (tempItem) {  //loop used to find a matching spec and print its values
-				if ((tempItem->dimension).compare(specificInfo) == 0) {
-
-					ItemNode *tempNode = new ItemNode();
-					tempNode->name = tempItem->name;
-					tempNode->model = tempItem->model;
-					tempNode->revision = tempItem->revision;
-					tempNode->color = tempItem->color;
-					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 					tempListPtr->addNode(tempNode);
@@ -273,7 +272,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 					tempListPtr->addNode(tempNode);
@@ -294,7 +292,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 					tempListPtr->addNode(tempNode);
@@ -316,7 +313,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 					tempListPtr->addNode(tempNode);
@@ -337,7 +333,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 					tempListPtr->addNode(tempNode);
@@ -358,7 +353,6 @@ public:
 					tempNode->revision = tempItem->revision;
 					tempNode->color = tempItem->color;
 					tempNode->price = tempItem->price;
-					tempNode->dimension = tempItem->dimension;
 					tempNode->serial = tempItem->serial;
 					tempNode->SKU = tempItem->SKU;
 					tempListPtr->addNode(tempNode);
