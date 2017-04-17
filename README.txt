@@ -4,4 +4,4 @@ Branches:
 
 - Master: The main branch, for working code;
 
-- sub-branch: Used for editing;
+- sub-branch: Used for editing; //Since removed.  Files zipped and moved to "springproject17/Misc" path
